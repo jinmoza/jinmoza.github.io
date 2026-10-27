@@ -1,6 +1,6 @@
 # Jin's Notes
 
-Personal blog for [Jin9810](https://github.com/Jin9810), built with [Astro](https://astro.build/) and the MIT-licensed [Retypeset](https://github.com/radishzzz/astro-theme-retypeset) theme.
+Personal blog for [jinmoza](https://github.com/jinmoza), published at [jinmoza.github.io](https://jinmoza.github.io/) and built with [Astro](https://astro.build/) using the MIT-licensed [Retypeset](https://github.com/radishzzz/astro-theme-retypeset) theme.
 
 ## Write a post
 

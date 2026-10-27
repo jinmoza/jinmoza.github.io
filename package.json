@@ -1,9 +1,9 @@
 {
-  "name": "jin9810-blog",
+  "name": "jinmoza-blog",
   "type": "module",
   "version": "1.0.0",
   "packageManager": "pnpm@10.33.0",
-  "repository": "https://github.com/Jin9810/Jin9810.github.io",
+  "repository": "https://github.com/jinmoza/jinmoza.github.io",
   "scripts": {
     "dev": "astro check && astro dev",
     "build": "astro check && astro build && pnpm apply-lqip",

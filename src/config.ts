@@ -12,9 +12,9 @@ export const themeConfig: ThemeConfig = {
     // use i18n title/subtitle/description from src/i18n/ui.ts instead of static ones above
     i18nTitle: false, // true | false
     // author name
-    author: 'Jin9810',
+    author: 'jinmoza',
     // site url
-    url: 'https://jin9810.github.io',
+    url: 'https://jinmoza.github.io',
     // base path
     // root directory for all pages and assets
     base: '/', // e.g., '/blog', '/docs'
@@ -167,7 +167,7 @@ export const themeConfig: ThemeConfig = {
       },
       {
         name: 'GitHub',
-        url: 'https://github.com/Jin9810',
+        url: 'https://github.com/jinmoza',
       },
       // {
       //   name: 'X',
