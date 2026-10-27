@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet href="/feeds/atom-style.xsl" type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://jin9810.github.io/</id>
+    <id>https://jinmoza.github.io/</id>
     <title>Jin's Notes</title>
-    <updated>2026-10-19T14:01:53.787Z</updated>
+    <updated>2026-10-27T03:21:36.156Z</updated>
     <generator>Astro-Theme-Retypeset with Feed for Node.js</generator>
     <author>
-        <name>Jin9810</name>
-        <uri>https://jin9810.github.io/</uri>
+        <name>jinmoza</name>
+        <uri>https://jinmoza.github.io/</uri>
     </author>
-    <link rel="alternate" href="https://jin9810.github.io/"/>
-    <link rel="self" href="https://jin9810.github.io/atom.xml"/>
+    <link rel="alternate" href="https://jinmoza.github.io/"/>
+    <link rel="self" href="https://jinmoza.github.io/atom.xml"/>
     <subtitle>一个关于系统性能、编译器、AI 工程与个人成长的技术博客。</subtitle>
-    <rights>Copyright © 2026 Jin9810</rights>
+    <rights>Copyright © 2026 jinmoza</rights>
     <entry>
         <title type="html"><![CDATA[你好，世界]]></title>
-        <id>https://jin9810.github.io/posts/hello-world/</id>
-        <link href="https://jin9810.github.io/posts/hello-world/"/>
+        <id>https://jinmoza.github.io/posts/hello-world/</id>
+        <link href="https://jinmoza.github.io/posts/hello-world/"/>
         <updated>2026-10-19T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[这是博客的第一篇文章，也是一个新的开始。]]></summary>
         <content type="html"><![CDATA[<p>欢迎来到 <strong>Jin's Notes</strong>。</p>
@@ -31,8 +31,8 @@
 <p>比起追求更新频率，我更希望这里留下经得起回看的内容。</p>
 ]]></content>
         <author>
-            <name>Jin9810</name>
-            <uri>https://jin9810.github.io/</uri>
+            <name>jinmoza</name>
+            <uri>https://jinmoza.github.io/</uri>
         </author>
         <published>2026-10-19T00:00:00.000Z</published>
     </entry>

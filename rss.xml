@@ -3,18 +3,18 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Jin's Notes</title>
-        <link>https://jin9810.github.io/</link>
+        <link>https://jinmoza.github.io/</link>
         <description>一个关于系统性能、编译器、AI 工程与个人成长的技术博客。</description>
-        <lastBuildDate>Mon, 19 Oct 2026 14:01:53 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 27 Oct 2026 03:21:36 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Astro-Theme-Retypeset with Feed for Node.js</generator>
         <language>zh</language>
-        <copyright>Copyright © 2026 Jin9810</copyright>
-        <atom:link href="https://jin9810.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+        <copyright>Copyright © 2026 jinmoza</copyright>
+        <atom:link href="https://jinmoza.github.io/rss.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[你好，世界]]></title>
-            <link>https://jin9810.github.io/posts/hello-world/</link>
-            <guid isPermaLink="false">https://jin9810.github.io/posts/hello-world/</guid>
+            <link>https://jinmoza.github.io/posts/hello-world/</link>
+            <guid isPermaLink="false">https://jinmoza.github.io/posts/hello-world/</guid>
             <pubDate>Mon, 19 Oct 2026 00:00:00 GMT</pubDate>
             <description><![CDATA[这是博客的第一篇文章，也是一个新的开始。]]></description>
             <content:encoded><![CDATA[<p>欢迎来到 <strong>Jin's Notes</strong>。</p>
@@ -28,7 +28,7 @@
 <p>网站使用 <a href="https://astro.build/">Astro</a> 构建，通过 GitHub Pages 自动发布。文章使用 Markdown 编写，因此内容始终以简单、可迁移的文件保存在自己的仓库中。</p>
 <p>比起追求更新频率，我更希望这里留下经得起回看的内容。</p>
 ]]></content:encoded>
-            <author>Jin9810</author>
+            <author>jinmoza</author>
         </item>
     </channel>
 </rss>
