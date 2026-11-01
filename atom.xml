@@ -3,7 +3,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://jinmoza.github.io/</id>
     <title>Jin's Notes</title>
-    <updated>2026-11-01T13:19:18.984Z</updated>
+    <updated>2026-11-01T14:23:21.305Z</updated>
     <generator>Astro-Theme-Retypeset with Feed for Node.js</generator>
     <author>
         <name>jinmoza</name>
@@ -330,6 +330,113 @@ llc -O0 -global-isel=1 -global-isel-abort=1 | llvm-mc
 </code></pre>
 <p>MFMA FP4 source tuple 则从 <code>v[0:7]</code> / <code>v[8:15]</code> 收缩为 <code>v[0:3]</code> / <code>v[8:11]</code>。<code>llc</code> 的文本输出现在与 MC 校验和硬件编码一致。</p>
 <p>在一个 WMMA 最小例中，静态机器码观察到声明的 VGPR 数从 40 降到 24，<code>scratch_load_b32</code> 从 9 条降到 8 条；MFMA 代表例的总 VGPR 数不变，但 source tuple 已被修正。这些结果说明更准确的依赖模型可能减少寄存器压力和保守操作，但没有真机 benchmark、profiling 或 PMU 数据，因此本项目只主张正确性修复和静态资源改善，不声称运行性能提升。</p>
+]]></content>
+        <author>
+            <name>jinmoza</name>
+            <uri>https://jinmoza.github.io/</uri>
+        </author>
+        <published>2026-11-01T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[LLVM AMDGPU：修复 MFMA scale verifier 的 Src1 format 诊断关联]]></title>
+        <id>https://jinmoza.github.io/posts/llvm-amdgpu-mfma-src1-format-diagnostic/</id>
+        <link href="https://jinmoza.github.io/posts/llvm-amdgpu-mfma-src1-format-diagnostic/"/>
+        <updated>2026-11-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[修复 LLVM AMDGPU IR verifier 在报告 MFMA scale Src1 向量宽度错误时关联了错误 format 参数的问题。]]></summary>
+        <content type="html"><![CDATA[<h2>摘要</h2>
+<p>LLVM 的 AMDGPU IR verifier 在检查 MFMA scale intrinsic 时，能够正确判断 Src1/B 向量是否满足 B format 的宽度要求，但失败诊断附带了错误的参数：检查依据是参数 4 <code>BLGP</code>，打印的却是参数 5——A scale 的 <code>op_sel</code>。</p>
+<p>本次修复把诊断上下文改为参数 4，并强化既有 verifier 回归测试，使参数 4 与参数 5 取不同常量，从而真正验证错误关联的是 B format。修改只影响非法 IR 的诊断对象，不改变 IR 的接受或拒绝结果，也不触及 intrinsic ABI、AMDGPU lowering、指令选择或机器码。</p>
+<h2>上游交付</h2>
+<ul>
+<li>LLVM PR：<a href="https://github.com/llvm/llvm-project/pull/237737">llvm/llvm-project#237737 — AMDGPU Fix MFMA Src1 format diagnostic</a></li>
+<li>完整补丁：<a href="https://github.com/llvm/llvm-project/pull/237737/files">PR #237737 Files changed</a></li>
+<li>对应提交：<a href="https://github.com/jinmoza/llvm-project/commit/92564a6a1082963af94676f03e7761c87d51f8d1"><code>92564a6a1082</code></a></li>
+</ul>
+<h2>问题所在层级</h2>
+<p>该检查位于 <code>llvm/lib/IR/VerifierAMDGPU.cpp</code>，属于 LLVMCore 中的 LLVM IR verifier，而不是 AMDGPU lowering、MachineVerifier 或 <code>llvm-mc</code>：</p>
+<pre><code>LLVM IR Parser
+  -&gt; LLVM IR Verifier
+     -&gt; AMDGPU intrinsic 专用检查  &lt;- 问题位于这里
+  -&gt; AMDGPULowerIntrinsics
+  -&gt; SelectionDAG / GlobalISel
+  -&gt; Machine IR / MC
+</code></pre>
+<p><code>llvm-as</code>、<code>opt</code> 和 <code>llc</code> 都会在正常流程中触发 IR 验证。非法调用会在进入 AMDGPU CodeGen 前被拒绝，因此这里的错误不会传播成错误指令；它的问题是把无关参数展示给开发者，误导对非法向量宽度的定位。</p>
+<h2>参数语义与不一致</h2>
+<p>MFMA scale intrinsic 中与本问题相关的参数是：</p>
+<table>
+<thead>
+<tr>
+<th>参数编号</th>
+<th>含义</th>
+<th>是否决定源向量宽度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Src0 / A</td>
+<td>被检查对象</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Src1 / B</td>
+<td>被检查对象</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>CBSZ</code>，A format</td>
+<td>决定 A 所需宽度</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>BLGP</code>，B format</td>
+<td>决定 B 所需宽度</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A scale <code>op_sel</code></td>
+<td>与 B 宽度无关</td>
+</tr>
+</tbody>
+</table>
+<p>Src0/A 的检查是自洽的：宽度由参数 3 <code>CBSZ</code> 决定，诊断也附带参数 3。Src1/B 的判定同样正确使用了参数 4 <code>BLGP</code>，但诊断上下文错误地取了参数 5：</p>
+<pre><code>Check(Src1Ty-&gt;getNumElements() &gt;= GetFormatNumRegs(BLGP),
+      "invalid vector type for format", &amp;Call, Src1,
+      Call.getArgOperand(5));
+</code></pre>
+<p>因此这是一个明确的 operand index 错误，而不是 format 语义或宽度规则存在歧义。</p>
+<h2>可区分的最小复现</h2>
+<p>要证明诊断究竟引用了哪个参数，必须让参数 4 和参数 5 的值不同。例如让 B 为 <code>&lt;4 x i32&gt;</code>，同时设置：</p>
+<pre><code>; 参数 4：BLGP = 0，B format 为 FP8，要求至少 8 个元素
+; 参数 5：A scale op_sel = 2，与 B 宽度无关
+call ...(&lt;8 x i32&gt; %a, &lt;4 x i32&gt; %b, ..., i32 0, i32 0, i32 2, ...)
+</code></pre>
+<p>此时 verifier 拒绝 IR 是正确的，因为 <code>4 &lt; 8</code>。修复前，诊断最后打印 <code>i32 2</code>，也就是无关的参数 5；正确结果应打印 <code>i32 0</code>，即实际决定 B 宽度的参数 4。</p>
+<p>Src0/A 可以作为对照：让 A 过窄且参数 3 与参数 5 不同，诊断会正确打印参数 3。A、B 两条路径的对照进一步排除了诊断框架本身选错对象的可能性，问题就在 Src1 <code>Check</code> 调用传入的最后一个 operand。</p>
+<h2>为什么既有测试没有发现</h2>
+<p>既有 <code>llvm/test/Verifier/AMDGPU/mfma-scale.ll</code> 已覆盖 Src1/B 过窄，但参数 4 和参数 5 都是 <code>i32 0</code>。无论实现取哪个参数，FileCheck 看到的最后一行都是 <code>i32 0</code>，因此测试只能确认“打印了一个零”，不能确认这个零来自 <code>BLGP</code>。</p>
+<p>回归测试的关键不是再增加一个同类非法调用，而是制造参数来源的可观察差异：保留参数 4 为 <code>i32 0</code>，把参数 5 改为 <code>i32 1</code>，并继续要求诊断打印 <code>i32 0</code>。这样，未来若再次把诊断关联到参数 5，测试会立即失败。</p>
+<h2>修复与范围控制</h2>
+<p>最终代码修复只有一处：</p>
+<pre><code> Check(Src1Ty-&gt;getNumElements() &gt;= GetFormatNumRegs(BLGP),
+       "invalid vector type for format", &amp;Call, Src1,
+-      Call.getArgOperand(5));
++      Call.getArgOperand(4));
+</code></pre>
+<p>同时审计了 <code>verifyAMDGPUIntrinsicCall()</code> 中同级的 operand-aware 检查：MFMA Src0、format 范围、WMMA A/B、cooperative atomic 和 AV metadata 的判定对象与诊断对象一致，未发现另一个同类的“条件使用 X、诊断打印 Y”错误。部分检查只附带完整 call，精度较低，但不属于本次参数关联错误。</p>
+<p>范围因此保持为：一行生产代码修复，加一处能够区分两个参数的测试调整。没有顺手重构诊断框架，也没有把它并入此前的 #236362 lowering 修复。</p>
+<h2>验证结果</h2>
+<p>验证先以测试改动建立 RED：在生产代码未修复时，测试期望参数 4 的 <code>i32 0</code>，实际却打印参数 5 的 <code>i32 1</code>。修改 operand index 后同一测试转为 GREEN。</p>
+<p>最终补丁通过：</p>
+<ul>
+<li><code>llvm/test/Verifier/AMDGPU/mfma-scale.ll</code>：1/1；</li>
+<li><code>llvm/test/Verifier/AMDGPU</code>：18/18；</li>
+<li>完整 <code>llvm/test/Verifier</code>：444 PASS、10 UNSUPPORTED、0 FAIL；</li>
+<li><code>git diff --check</code>；</li>
+<li>独立 Codex review 与 code-simplifier 检查，未发现需要扩大的修改。</li>
+</ul>
+<p>这个修复的核心经验是：诊断测试不仅要检查输出值，还要让候选 operand 具有不同的可观察值。只有这样，测试才能证明诊断关联的是正确语义来源，而不是偶然打印了相同常量。</p>
 ]]></content>
         <author>
             <name>jinmoza</name>
