@@ -60,6 +60,7 @@ const isHome = isHomePage(Astro.url.pathname)
           <PostDate
             date={post.data.published}
             minutes={post.remarkPluginFrontmatter.minutes}
+            pageviewPath={getPostPath(slug, lang)}
           />
         </div>
 
@@ -68,6 +69,7 @@ const isHome = isHomePage(Astro.url.pathname)
           <PostDate
             date={post.data.published}
             minutes={post.remarkPluginFrontmatter.minutes}
+            pageviewPath={getPostPath(slug, lang)}
           />
         </div>
 

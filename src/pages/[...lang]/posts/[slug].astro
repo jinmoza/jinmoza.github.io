@@ -9,6 +9,7 @@ import BackButton from '@/components/Widgets/BackButton.astro'
 import TOC from '@/components/Widgets/TOC.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getPostPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
 import { getPostDescription } from '@/utils/description'
@@ -112,6 +113,8 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
         date={post.data.published}
         updatedDate={post.data.updated}
         minutes={remarkPluginFrontmatter.minutes}
+        pageviewPath={getPostPath(slug, currentLang)}
+        incrementPageview
       />
     </div>
     <!-- TOC -->

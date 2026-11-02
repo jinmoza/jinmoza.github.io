@@ -1,0 +1,58 @@
+---
+import { themeConfig } from '@/config'
+
+const serverURL = themeConfig.comment.waline?.serverURL?.trim() ?? ''
+---
+
+{serverURL && (
+  <div id="pageview-config" data-server-url={serverURL} hidden />
+)}
+
+<script>
+let pageviewAborts: (() => void)[] = []
+let setupGeneration = 0
+
+function cleanupPageviews() {
+  setupGeneration += 1
+  pageviewAborts.forEach(abort => abort())
+  pageviewAborts = []
+}
+
+async function setupPageviews() {
+  cleanupPageviews()
+
+  const generation = setupGeneration
+  const config = document.getElementById('pageview-config')
+  const serverURL = config?.dataset.serverUrl?.trim()
+  if (!serverURL) {
+    return
+  }
+
+  try {
+    const { pageviewCount } = await import('@waline/client/pageview')
+    if (generation !== setupGeneration) {
+      return
+    }
+
+    const counters = [
+      { selector: '[data-pageview-update="false"]', update: false },
+      { selector: '[data-pageview-update="true"]', update: true },
+    ]
+
+    counters.forEach(({ selector, update }) => {
+      if (!document.querySelector(selector)) {
+        return
+      }
+
+      const abort = pageviewCount({ serverURL, selector, update })
+      pageviewAborts.push(abort)
+    })
+  }
+  catch (error) {
+    console.error('[Pageview] Failed to load counts:', error)
+  }
+}
+
+document.addEventListener('astro:page-load', setupPageviews)
+document.addEventListener('astro:before-swap', cleanupPageviews)
+</script>

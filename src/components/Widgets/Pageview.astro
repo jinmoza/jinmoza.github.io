@@ -1,0 +1,24 @@
+---
+import { themeConfig } from '@/config'
+
+interface Props {
+  path: string
+  update?: boolean
+  className?: string
+}
+
+const { path, update = false, className = '' } = Astro.props
+const serverURL = themeConfig.comment.waline?.serverURL?.trim() ?? ''
+---
+
+{serverURL && (
+  <span class={className}>
+    <span
+      class="waline-pageview-count"
+      data-path={path}
+      data-pageview-path={path}
+      data-pageview-update={String(update)}
+    >—</span>
+    次阅读
+  </span>
+)}

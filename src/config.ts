@@ -4,7 +4,7 @@ export const themeConfig: ThemeConfig = {
   // SITE INFORMATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> START
   site: {
     // site title
-    title: "Jin's Notes",
+    title: 'Jin\'s Notes',
     // site subtitle
     subtitle: '记录技术、思考与持续优化',
     // site description
@@ -102,7 +102,8 @@ export const themeConfig: ThemeConfig = {
     // https://waline.js.org/en/
     waline: {
       // server url
-      serverURL: '',
+      // Set PUBLIC_WALINE_SERVER_URL when building to enable pageview counts.
+      serverURL: import.meta.env.PUBLIC_WALINE_SERVER_URL ?? '',
       // emoji url
       emoji: [
         'https://unpkg.com/@waline/emojis@1.2.0/tw-emoji',
