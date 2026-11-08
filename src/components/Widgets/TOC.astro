@@ -19,7 +19,7 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
   // TOC Container
   <div
     id="toc-container"
-    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-secondary/0)"
+    class="mb-6 uno-round-border bg-secondary/5 lg:(sticky top-20 mb-0 border-none bg-secondary/0)"
   >
     {/* Hidden Checkbox */}
     <input
@@ -31,7 +31,7 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
     <div class="relative h-12 w-full">
       <label
         for="toc-toggle"
-        class="absolute inset-0 flex cursor-pointer items-center 2xl:(static flex c-secondary/60 transition-colors ease-out hover:c-primary)"
+        class="absolute inset-0 flex cursor-pointer items-center lg:(static flex c-secondary/60 transition-colors ease-out hover:c-primary)"
       >
         {/* Title on Mobile */}
         <span id="toc-mobile-text">
@@ -42,7 +42,7 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
         <TocIcon
           id="toc-desktop-icon"
           aria-hidden="true"
-          class="ml-4 hidden aspect-square w-4.2 2xl:(mt-4 block origin-center active:scale-90!)"
+          class="ml-4 hidden aspect-square w-4.2 lg:(mt-4 block origin-center active:scale-90!)"
           fill="currentColor"
         />
       </label>
@@ -83,7 +83,7 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
 )}
 
 <script>
-const is2xl = window.matchMedia('(min-width: 1536px)')
+const isDesktop = window.matchMedia('(min-width: 1024px)')
 
 let ticking = false
 let lastLink: Element | null = null
@@ -107,7 +107,7 @@ function scrollToActiveLink() {
 
 // Throttle scroll events
 function handleScroll() {
-  if (!ticking && is2xl.matches) {
+  if (!ticking && isDesktop.matches) {
     window.requestAnimationFrame(scrollToActiveLink)
     ticking = true
   }

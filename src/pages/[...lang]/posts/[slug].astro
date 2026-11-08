@@ -86,33 +86,35 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postSlug={post.id}
   supportedLangs={supportedLangs}
 >
-  <article class="heti">
-    <div class="relative">
-      <!-- Go Back Button On Desktop -->
-      <BackButton />
-      <!-- Title -->
-      <h1 class="post-title">
-        <span
-          transition:name={`post-${slug}${currentLang ? `-${currentLang}` : ''}`}
-          data-disable-theme-toggle-transition
-        >
-          {post.data.title}
-        </span>
-      </h1>
-    </div>
+  <article class="heti post-page">
+    <div class="post-header">
+      <div class="relative">
+        <!-- Go Back Button On Desktop -->
+        <BackButton />
+        <!-- Title -->
+        <h1 class="post-title">
+          <span
+            transition:name={`post-${slug}${currentLang ? `-${currentLang}` : ''}`}
+            data-disable-theme-toggle-transition
+          >
+            {post.data.title}
+          </span>
+        </h1>
+      </div>
 
-    <!-- Date -->
-    <div
-      id="post-date"
-      class="mb-17.2 block c-primary font-time"
-      transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
-      data-disable-theme-toggle-transition
-    >
-      <PostDate
-        date={post.data.published}
-        updatedDate={post.data.updated}
-        minutes={remarkPluginFrontmatter.minutes}
-      />
+      <!-- Date -->
+      <div
+        id="post-date"
+        class="mb-17.2 block c-primary font-time"
+        transition:name={`time-${slug}${currentLang ? `-${currentLang}` : ''}`}
+        data-disable-theme-toggle-transition
+      >
+        <PostDate
+          date={post.data.published}
+          updatedDate={post.data.updated}
+          minutes={remarkPluginFrontmatter.minutes}
+        />
+      </div>
     </div>
     <!-- TOC -->
     {post.data.toc && <TOC headings={headings} />}
