@@ -28,5 +28,11 @@ it('post pages omit the right-side site chrome', () => {
 })
 
 it('post pages retain top spacing after the site chrome is removed', () => {
-  assert.match(extensionStyles, /\.post-shell\s*\{[^}]*padding-top:\s*5rem/)
+  assert.match(extensionStyles, /\.post-layout \.site-shell\s*\{[^}]*padding-top:\s*5rem/)
+})
+
+it('the shared site shell keeps a static class so desktop attributify rules are generated', () => {
+  assert.match(layout, /class="site-shell mx-auto max-w-205\.848 min-h-vh w-full min-h-dvh"/)
+  assert.doesNotMatch(layout, /<div\s+class:list=/)
+  assert.match(layout, /isPost \? 'scroll-smooth post-layout' : ''/)
 })

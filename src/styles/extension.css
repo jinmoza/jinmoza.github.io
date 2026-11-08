@@ -181,7 +181,7 @@ pre.mermaid svg {
 
 /* Post Layout >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 @media (min-width: 1024px) {
-  .post-shell {
+  .post-layout .site-shell {
     --at-apply: 'mx-auto! max-w-[44rem]!';
     padding-top: 5rem !important;
   }
